@@ -7,13 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muzaffar.dagger_hilt_tutorial.data.model.User
 import com.muzaffar.dagger_hilt_tutorial.data.repository.MainRepository
-import com.muzaffar.dagger_hilt_tutorial.utils.NetworkHelper
 import com.muzaffar.dagger_hilt_tutorial.utils.Resource
 import kotlinx.coroutines.launch
 
 class MainViewModel @ViewModelInject constructor(
-    private val mainRepository: MainRepository,
-    private val networkHelper: NetworkHelper
+    private val mainRepository: MainRepository
 ) : ViewModel() {
 
     private val _users = MutableLiveData<Resource<List<User>>>()
@@ -27,13 +25,11 @@ class MainViewModel @ViewModelInject constructor(
     private fun fetchUsers() {
         viewModelScope.launch {
             _users.postValue(Resource.loading(null))
-            if (networkHelper.isNetworkConnected()) {
-                mainRepository.getUsers().let {
-                    if (it.isSuccessful) {
-                        _users.postValue(Resource.success(it.body()))
-                    } else _users.postValue(Resource.error(it.errorBody().toString(), null))
-                }
-            } else _users.postValue(Resource.error("No internet connection", null))
+            mainRepository.getUsers().let {
+                if (it.isSuccessful) {
+                    _users.postValue(Resource.success(it.body()))
+                } else _users.postValue(Resource.error(it.errorBody().toString(), null))
+            }
         }
     }
 }
