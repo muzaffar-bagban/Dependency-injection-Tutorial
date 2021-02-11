@@ -5,13 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.muzaffar.dagger_hilt_tutorial.data.model.User
-import com.muzaffar.dagger_hilt_tutorial.data.repository.MainRepository
-import com.muzaffar.dagger_hilt_tutorial.utils.Resource
+import com.muzaffar.domain.User
+import com.muzaffar.domain.usecases.UseCaseFactory
+import com.muzaffar.domain.utils.Resource
+import com.muzaffar.domain.utils.Status
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+
 class MainViewModel @ViewModelInject constructor(
-    private val mainRepository: MainRepository
+    private val useCaseFactory: UseCaseFactory
 ) : ViewModel() {
 
     private val _users = MutableLiveData<Resource<List<User>>>()
@@ -25,10 +28,14 @@ class MainViewModel @ViewModelInject constructor(
     private fun fetchUsers() {
         viewModelScope.launch {
             _users.postValue(Resource.loading(null))
-            mainRepository.getUsers().let {
-                if (it.isSuccessful) {
-                    _users.postValue(Resource.success(it.body()))
-                } else _users.postValue(Resource.error(it.errorBody().toString(), null))
+            useCaseFactory.getUserList().let { responseFlow ->
+                responseFlow.collect { responseResource ->
+                    when(responseResource.status) {
+                        Status.SUCCESS -> {_users.postValue(Resource.success(responseResource.data))}
+                        Status.LOADING -> {_users.postValue(Resource.loading(null))}
+                        Status.ERROR -> {_users.postValue(Resource.error(responseResource.message!!, null))}
+                    }
+                }
             }
         }
     }

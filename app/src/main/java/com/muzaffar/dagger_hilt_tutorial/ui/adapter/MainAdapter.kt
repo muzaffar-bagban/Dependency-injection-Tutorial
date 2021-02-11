@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.muzaffar.dagger_hilt_tutorial.R
-import com.muzaffar.dagger_hilt_tutorial.data.model.User
+import com.muzaffar.domain.User
 import kotlinx.android.synthetic.main.item_layout.view.*
 
 class MainAdapter(

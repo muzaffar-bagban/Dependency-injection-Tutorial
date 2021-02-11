@@ -1,4 +1,4 @@
-package com.muzaffar.dagger_hilt_tutorial.utils
+package com.muzaffar.domain.utils
 
 enum class Status {
     SUCCESS,

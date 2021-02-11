@@ -8,10 +8,10 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.muzaffar.dagger_hilt_tutorial.data.model.User
 import com.muzaffar.dagger_hilt_tutorial.ui.adapter.MainAdapter
 import com.muzaffar.dagger_hilt_tutorial.ui.viewmodel.MainViewModel
-import com.muzaffar.dagger_hilt_tutorial.utils.Status
+import com.muzaffar.domain.User
+import com.muzaffar.domain.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 

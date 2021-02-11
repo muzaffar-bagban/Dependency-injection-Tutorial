@@ -1,4 +1,4 @@
-package com.muzaffar.dagger_hilt_tutorial.utils
+package com.muzaffar.domain.utils
 
 data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
 
